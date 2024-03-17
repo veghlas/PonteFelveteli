@@ -1,5 +1,6 @@
 package com.pontefelveteli.controller;
 
+import com.pontefelveteli.domain.AppUser;
 import com.pontefelveteli.dto.AppUserinfo;
 import com.pontefelveteli.dto.CreateAppUserCommand;
 import com.pontefelveteli.service.AppUserService;
@@ -20,12 +21,14 @@ import java.util.List;
 public class AppUserController {
     private AppUserService appUserService;
 
+
+
     @Autowired
     public AppUserController(AppUserService appUserService) {
         this.appUserService = appUserService;
     }
 
-    @PostMapping
+    @PostMapping("/save")
     public ResponseEntity<AppUserinfo> saveAppUser(@RequestBody @Valid CreateAppUserCommand createAppUserCommand) {
         log.info("Http request, POST / /api/users, with command: " + createAppUserCommand.toString());
         AppUserinfo appUserInfo = appUserService.saveAppUser(createAppUserCommand);
@@ -39,6 +42,5 @@ public class AppUserController {
         List<AppUserinfo> appUserinfoList = appUserService.listAllAppUsers(pageNo, pageSize);
         return new ResponseEntity<>(appUserinfoList, HttpStatus.OK);
     }
-
 
 }

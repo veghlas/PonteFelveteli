@@ -28,5 +28,7 @@ public class CreateAppUserCommand {
 
     private String email;
 
+    private String password;
+
     private List<String> phone_numbers;
 }
