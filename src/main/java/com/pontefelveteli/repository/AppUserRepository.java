@@ -1,0 +1,9 @@
+package com.pontefelveteli.repository;
+
+import com.pontefelveteli.domain.AppUser;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+interface AppUserRepository extends JpaRepository<AppUser, Integer> {
+}

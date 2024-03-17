@@ -5,10 +5,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="3" author="Vegh Laszlo">
-        <addColumn tableName="users">
-            <column name="phone_numbers" type="varchar[]"/>
-        </addColumn>
+    <changeSet id="4" author="Vegh Laszlo">
+        <renameTable oldTableName="users" newTableName="app_users" />
     </changeSet>
 
 </databaseChangeLog>
