@@ -1,18 +1,17 @@
 package com.pontefelveteli.controller;
 
-import com.pontefelveteli.dto.*;
+import com.pontefelveteli.dto.AppUserinfo;
+import com.pontefelveteli.dto.CreateAppUserCommand;
 import com.pontefelveteli.service.AppUserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import javax.xml.transform.OutputKeys;
+import java.util.List;
 
 
 @RestController
@@ -31,6 +30,14 @@ public class AppUserController {
         log.info("Http request, POST / /api/users, with command: " + createAppUserCommand.toString());
         AppUserinfo appUserInfo = appUserService.saveAppUser(createAppUserCommand);
         return new ResponseEntity<>(appUserInfo, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AppUserinfo>> getAllAppUsers(@RequestParam(value = "pageNo", defaultValue = "0", required = false) Integer pageNo,
+                                                            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
+        log.info("Http request, GET / /api/users");
+        List<AppUserinfo> appUserinfoList = appUserService.listAllAppUsers(pageNo, pageSize);
+        return new ResponseEntity<>(appUserinfoList, HttpStatus.OK);
     }
 
 

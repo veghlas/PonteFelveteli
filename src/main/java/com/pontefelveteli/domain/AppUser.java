@@ -40,7 +40,6 @@ public class AppUser {
     @Column(name = "email_address")
     private String email;
 
-    //Postgre engedi, így nem csinálok neki külön entity-t. Szerintem logikailag így jobb lesz.
     @ElementCollection
     @CollectionTable(name = "phone_numbers")
     @Column(name = "phone_number")
@@ -57,6 +56,6 @@ public class AppUser {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role")
+    @JoinTable(name = "roles")
     private List<Role> roles;
 }
