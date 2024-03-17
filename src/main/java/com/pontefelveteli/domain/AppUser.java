@@ -15,7 +15,8 @@ import java.util.List;
 @Setter
 public class AppUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_seq")
+    @SequenceGenerator(name="app_user_seq", sequenceName="app_user_seq", allocationSize=1)
     private Integer id;
 
     @Column(name = "first_name")
@@ -41,10 +42,21 @@ public class AppUser {
 
     //Postgre engedi, így nem csinálok neki külön entity-t. Szerintem logikailag így jobb lesz.
     @ElementCollection
-    @CollectionTable(name = "phone_numbers", joinColumns = @JoinColumn(name = "phone_number_id"))
-    @Column(name = "phone_numbers")
+    @CollectionTable(name = "phone_numbers")
+    @Column(name = "phone_number")
     private List<String> phone_numbers;
 
     @OneToMany(mappedBy = "user")
     private List<Address> addressList;
+
+    @Column
+    private Boolean active;
+
+    @Column
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role")
+    private List<Role> roles;
 }

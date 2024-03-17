@@ -9,4 +9,13 @@
     <include file="db/changelog/changelog-v2.0.xml"/>
     <include file="db/changelog/changelog-v3.0.xml"/>
     <include file="db/changelog/changelog-v4.0.xml"/>
+    <include file="db/changelog/changelog-v5.0.xml"/>
+    <include file="db/changelog/changelog-v6.0.xml"/>
+    <include file="db/changelog/changelog-v7.0.xml"/>
+    <include file="db/changelog/changelog-v8.0.xml"/>
+    <include file="db/changelog/changelog-v9.0.xml"/>
+    <include file="db/changelog/changelog-v10.0.xml"/>
+    <include file="db/changelog/changelog-v11.0.xml"/>
+    <include file="db/changelog/changelog-v12.0.xml"/>
+    <include file="db/changelog/changelog-v13.0.xml"/>
 </databaseChangeLog>

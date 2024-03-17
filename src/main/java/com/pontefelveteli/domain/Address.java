@@ -6,14 +6,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "addresses")
+@Table(name = "address")
 @NoArgsConstructor
 @Getter
 @Setter
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addresses_seq")
+    @SequenceGenerator(name="addresses_seq", sequenceName="addresses_seq", allocationSize=1)
     private Integer id;
 
     @Column(name = "zip_code")

@@ -20,13 +20,7 @@ public class CreateAppUserCommand {
 
     private String nameOfMother;
 
-    private Integer zipCode;
-
-    private String city;
-
-    private String street;
-
-    private String houseNumber;
+    private List<CreateAddressCommand> createAddressCommandList;
 
     private Integer socialSecurityNumber;
 

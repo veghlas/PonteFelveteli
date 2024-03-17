@@ -20,13 +20,7 @@ public class AppUserinfo {
 
     private String nameOfMother;
 
-    private Integer zipCode;
-
-    private String city;
-
-    private String street;
-
-    private String houseNumber;
+    private List<AddressInfo> addressInfoList;
 
     private Integer socialSecurityNumber;
 

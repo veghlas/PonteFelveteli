@@ -1,5 +1,6 @@
 package com.pontefelveteli.service;
 
+
 import com.pontefelveteli.domain.AppUser;
 import com.pontefelveteli.dto.AddressInfo;
 import com.pontefelveteli.dto.AppUserinfo;
@@ -10,12 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 public class AppUserService {
     private AppUserRepository appUserRepository;
     private AddressService addressService;
     private ModelMapper modelMapper;
+
     @Autowired
     public AppUserService(AppUserRepository appUserRepository, AddressService addressService, ModelMapper modelMapper) {
         this.appUserRepository = appUserRepository;
@@ -25,8 +30,11 @@ public class AppUserService {
 
     public AppUserinfo saveAppUser(CreateAppUserCommand createAppUserCommand) {
         AppUser appUser = modelMapper.map(createAppUserCommand, AppUser.class);
-        addressService.saveAddress(appUser, createAppUserCommand);
+        List<AddressInfo> addressInfoList = addressService.saveAddress(appUser, createAppUserCommand.getCreateAddressCommandList());
         appUserRepository.save(appUser);
-        return modelMapper.map(appUser, AppUserinfo.class);
+        AppUserinfo appUserinfo = modelMapper.map(appUser, AppUserinfo.class);
+        appUserinfo.setAddressInfoList(addressInfoList);
+        return appUserinfo;
     }
+
 }

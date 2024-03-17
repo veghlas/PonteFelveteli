@@ -21,3 +21,13 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
 
+logging:
+  file:
+    name: ponteFelveteliLogs.log
+    path: \backend\src\main\resources\log
+  level:
+    org.springframework.web: info
+    org.hibernate: error
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+

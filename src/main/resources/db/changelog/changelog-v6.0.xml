@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="6" author="Vegh Laszlo">
+
+        <dropForeignKeyConstraint baseTableName="app_users" constraintName="fk_customers_address"/>
+        <dropColumn tableName="app_users" columnName="address_id"/>
+
+        <addColumn tableName="addresses">
+            <column name="user_id" type="int"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="addresses"
+                baseColumnNames="user_id"
+                constraintName="fk_customers_address"
+                referencedTableName="app_users"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+
+    </changeSet>
+
+</databaseChangeLog>
