@@ -28,4 +28,8 @@ public class Address {
     //Ez string ha véletlenül van pl. 2/A vagy hasonló házszám.
     @Column(name = "house_number")
     private String houseNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private AppUser user;
 }

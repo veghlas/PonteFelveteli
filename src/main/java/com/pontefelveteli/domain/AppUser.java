@@ -44,4 +44,7 @@ public class AppUser {
     @CollectionTable(name = "phone_numbers", joinColumns = @JoinColumn(name = "phone_number_id"))
     @Column(name = "phone_numbers")
     private List<String> phone_numbers;
+
+    @OneToMany(mappedBy = "user")
+    private List<Address> addressList;
 }
