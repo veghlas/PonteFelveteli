@@ -1,6 +1,5 @@
 package com.pontefelveteli.controller;
 
-import com.pontefelveteli.domain.AppUser;
 import com.pontefelveteli.dto.*;
 import com.pontefelveteli.service.AppUserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,8 +32,8 @@ public class AppUserController {
     }
 
     @PostMapping("/create")
-        @Secured({"ROLE_ADMIN"})
-        public ResponseEntity<String> saveAppUser(@RequestBody @Valid CreateAppUserCommand createAppUserCommand) {
+    @Secured({"ROLE_ADMIN"})
+    public ResponseEntity<String> saveAppUser(@RequestBody @Valid CreateAppUserCommand createAppUserCommand) {
         log.info("Http request, POST / /api/users/create, with command: " + createAppUserCommand.toString());
         appUserService.saveAppUser(createAppUserCommand);
         return new ResponseEntity<>("User has been created.", HttpStatus.CREATED);
@@ -42,20 +41,20 @@ public class AppUserController {
 
     @GetMapping
     @Secured({"ROLE_ADMIN"})
-    public ResponseEntity<List<AppUserinfo>> getAllAppUsers(@RequestParam(value = "pageNo", defaultValue = "0", required = false) Integer pageNo,
+    public ResponseEntity<List<AppUserInfo>> getAllAppUsers(@RequestParam(value = "pageNo", defaultValue = "0", required = false) Integer pageNo,
                                                             @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
         log.info("Http request, GET / /api/users");
-        List<AppUserinfo> appUserinfoList = appUserService.listAllAppUsers(pageNo, pageSize);
-        return new ResponseEntity<>(appUserinfoList, HttpStatus.OK);
+        List<AppUserInfo> appUserInfoList = appUserService.listAllAppUsers(pageNo, pageSize);
+        return new ResponseEntity<>(appUserInfoList, HttpStatus.OK);
     }
 
     @PutMapping("/update-data")
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public ResponseEntity<AppUserinfo> updateAppUser(@RequestBody @Valid UpdateAppUserCommand updateAppUserCommand) {
+    public ResponseEntity<AppUserInfo> updateAppUser(@RequestBody @Valid UpdateAppUserCommand updateAppUserCommand) {
         log.info("Http request, PUT / /api/users/update-data, with command " + updateAppUserCommand.toString());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails loggedInUser = appUserService.loadUserByUsername((String) authentication.getPrincipal());
-        AppUserinfo appUserinfo = appUserService.updateAppUser(loggedInUser, updateAppUserCommand);
+        AppUserInfo appUserinfo = appUserService.updateAppUser(loggedInUser, updateAppUserCommand);
         return new ResponseEntity<>(appUserinfo, HttpStatus.OK);
     }
 

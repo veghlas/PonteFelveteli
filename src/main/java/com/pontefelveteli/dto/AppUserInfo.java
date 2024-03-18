@@ -1,6 +1,7 @@
 package com.pontefelveteli.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,9 +11,10 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppUserinfo {
+@Builder
+public class AppUserInfo {
 
-    private String Name;
+    private String name;
 
     private LocalDate dateOfBirth;
 

@@ -69,19 +69,19 @@ public class AppUserService implements UserDetailsService {
         appUserRepository.save(appUser);
     }
 
-    public List<AppUserinfo> listAllAppUsers(Integer pageNo, Integer pageSize) {
+    public List<AppUserInfo> listAllAppUsers(Integer pageNo, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<AppUser> appUserPage = appUserRepository.findAll(pageable);
         List<AppUser> appUserList = appUserPage.getContent();
-        List<AppUserinfo> appUserinfoList = new ArrayList<>();
+        List<AppUserInfo> appUserInfoList = new ArrayList<>();
         appUserList.forEach(appUser -> {
-            AppUserinfo appUserinfo = getAppUserinfo(appUser);
-            appUserinfoList.add(appUserinfo);
+            AppUserInfo appUserinfo = getAppUserinfo(appUser);
+            appUserInfoList.add(appUserinfo);
         });
-        return appUserinfoList;
+        return appUserInfoList;
     }
 
-    public AppUserinfo updateAppUser(UserDetails loggedInUser, UpdateAppUserCommand updateAppUserCommand) {
+    public AppUserInfo updateAppUser(UserDetails loggedInUser, UpdateAppUserCommand updateAppUserCommand) {
         AppUser appUserToUpdate = findByName(loggedInUser.getUsername());
         if(updateAppUserCommand.getEmail() == null && updateAppUserCommand.getPhone_numbers() == null) {
             throw new EmailOrPhoneNumberIsRequiredException(appUserToUpdate.getEmail(), appUserToUpdate.getPhone_numbers());
@@ -93,8 +93,8 @@ public class AppUserService implements UserDetailsService {
         return getAppUserinfo(appUserToUpdate);
     }
 
-    private AppUserinfo getAppUserinfo(AppUser appUserToUpdate) {
-        AppUserinfo appUserinfo = modelMapper.map(appUserToUpdate, AppUserinfo.class);
+    private AppUserInfo getAppUserinfo(AppUser appUserToUpdate) {
+        AppUserInfo appUserinfo = modelMapper.map(appUserToUpdate, AppUserInfo.class);
         appUserinfo.setAddressInfoList(addressService.mapAddresListToAddresInfoList(appUserToUpdate.getAddressList()));
         return appUserinfo;
     }
