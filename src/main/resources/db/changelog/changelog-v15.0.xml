@@ -5,8 +5,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="15" author="Vegh Laszlo">
-        <renameColumn tableName="roles" oldColumnName="role" newColumnName="roles"></renameColumn>
+    <changeSet id="16" author="Vegh Laszlo">
+        <renameColumn tableName="app_user" oldColumnName="first_name" newColumnName="name"></renameColumn>
+        <dropColumn tableName="app_user" columnName="active"/>
+        <dropColumn tableName="app_user" columnName="last_name"/>
     </changeSet>
 
 </databaseChangeLog>

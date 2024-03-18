@@ -6,19 +6,17 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppUserinfo {
-
-    private String Name;
+public class UpdateAppUserCommand {
+    private String name;
 
     private LocalDate dateOfBirth;
 
     private String nameOfMother;
 
-    private List<AddressInfo> addressInfoList;
+    private UpdateAddressCommand updateAddressCommand;
 
     private Integer socialSecurityNumber;
 

@@ -31,4 +31,20 @@ public class GlobalExceptionHandler {
         log.error("Error in validation: " + validationError.getField() + ": " + validationError.getErrorMessage());
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<List<ValidationError>> handleUsernameNotFoundException(UsernameNotFoundException exception) {
+        ValidationError validationError = new ValidationError("name",
+                "User not found with name: " + exception.getName());
+        log.error("Error in validation: " + validationError.getField() + ": " + validationError.getErrorMessage());
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AddressNotFoundException.class)
+    public ResponseEntity<List<ValidationError>> handleAddressNotFoundException(AddressNotFoundException exception) {
+        ValidationError validationError = new ValidationError("addressId",
+                "Address not found for "+ exception.getEmail() + " with id: " + exception.getAddressId());
+        log.error("Error in validation: " + validationError.getField() + ": " + validationError.getErrorMessage());
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
 }

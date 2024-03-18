@@ -19,11 +19,8 @@ public class AppUser {
     @SequenceGenerator(name="app_user_seq", sequenceName="app_user_seq", allocationSize=1)
     private Integer id;
 
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
@@ -47,9 +44,6 @@ public class AppUser {
 
     @OneToMany(mappedBy = "user")
     private List<Address> addressList;
-
-    @Column
-    private Boolean active;
 
     @Column
     private String password;
