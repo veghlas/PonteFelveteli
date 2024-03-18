@@ -42,10 +42,7 @@ public class UpdateAppUserCommand {
 
     @Pattern(regexp = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$",
             message = "Incorrect email format!")
-    @NotBlank(message = "Cannot be blank!")
     private String email;
 
-    @NotBlank(message = "Phone number is required!")
-    @Pattern(regexp = "^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$", message = "Incorrect phone number format!")
     private List<String> phone_numbers;
 }

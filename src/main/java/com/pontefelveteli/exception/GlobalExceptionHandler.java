@@ -47,4 +47,20 @@ public class GlobalExceptionHandler {
         log.error("Error in validation: " + validationError.getField() + ": " + validationError.getErrorMessage());
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(UserNotFoundById.class)
+    public ResponseEntity<List<ValidationError>> handleUserNotFoundById(UserNotFoundById exception) {
+        ValidationError validationError = new ValidationError("userId",
+                "AppUser not found with id: " + exception.getUserId());
+        log.error("Error in validation: " + validationError.getField() + ": " + validationError.getErrorMessage());
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmailOrPhoneNumberIsRequiredException.class)
+    public ResponseEntity<List<ValidationError>> handleEmailOrPhoneNumberIsRequiredException(EmailOrPhoneNumberIsRequiredException exception) {
+        ValidationError validationError = new ValidationError("email",
+                "Email or phone number is required");
+        log.error("Error in validation: " + validationError.getField() + ": " + validationError.getErrorMessage());
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
 }

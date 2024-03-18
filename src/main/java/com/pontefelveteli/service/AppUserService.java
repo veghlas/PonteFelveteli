@@ -10,6 +10,8 @@ import com.pontefelveteli.domain.Address;
 import com.pontefelveteli.domain.AppUser;
 import com.pontefelveteli.domain.Role;
 import com.pontefelveteli.dto.*;
+import com.pontefelveteli.exception.EmailOrPhoneNumberIsRequiredException;
+import com.pontefelveteli.exception.UserNotFoundById;
 import com.pontefelveteli.repository.AppUserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,8 +81,11 @@ public class AppUserService implements UserDetailsService {
         return appUserinfoList;
     }
 
-    public AppUserinfo updateAppUser(UpdateAppUserCommand updateAppUserCommand) {
-        AppUser appUserToUpdate = findByName(updateAppUserCommand.getName());
+    public AppUserinfo updateAppUser(UserDetails loggedInUser, UpdateAppUserCommand updateAppUserCommand) {
+        AppUser appUserToUpdate = findByName(loggedInUser.getUsername());
+        if(updateAppUserCommand.getEmail() == null && updateAppUserCommand.getPhone_numbers() == null) {
+            throw new EmailOrPhoneNumberIsRequiredException(appUserToUpdate.getEmail(), appUserToUpdate.getPhone_numbers());
+        }
         modelMapper.map(updateAppUserCommand, appUserToUpdate);
         List<Address> addressList = addressService.updateAddress(appUserToUpdate, updateAppUserCommand.getUpdateAddressCommand());
         appUserToUpdate.setAddressList(addressList);
@@ -102,10 +107,21 @@ public class AppUserService implements UserDetailsService {
         return appUserOptional.get();
     }
 
-    public void deleteAppUser(UserNameToDelete deleteCommand) {
-        appUserRepository.delete(findByName(deleteCommand.getName()));
+    public void deleteMyUser(UserDetails loggedInUser) {
+        appUserRepository.delete(findByName(loggedInUser.getUsername()));
     }
 
+    public void deleteAppUser(Integer userId) {
+        appUserRepository.delete(findById(userId));
+    }
+
+    private AppUser findById(Integer userId) {
+        Optional<AppUser> userOptional = appUserRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundById(userId);
+        }
+        return userOptional.get();
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -202,4 +218,5 @@ public class AppUserService implements UserDetailsService {
         }
         return userOptional.get();
     }
+
 }

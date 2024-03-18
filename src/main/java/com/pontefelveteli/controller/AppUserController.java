@@ -33,8 +33,8 @@ public class AppUserController {
     }
 
     @PostMapping("/create")
-    @Secured({"ROLE_ADMIN"})
-    public ResponseEntity<String> saveAppUser(@RequestBody @Valid CreateAppUserCommand createAppUserCommand) {
+        @Secured({"ROLE_ADMIN"})
+        public ResponseEntity<String> saveAppUser(@RequestBody @Valid CreateAppUserCommand createAppUserCommand) {
         log.info("Http request, POST / /api/users/create, with command: " + createAppUserCommand.toString());
         appUserService.saveAppUser(createAppUserCommand);
         return new ResponseEntity<>("User has been created.", HttpStatus.CREATED);
@@ -53,17 +53,28 @@ public class AppUserController {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<AppUserinfo> updateAppUser(@RequestBody @Valid UpdateAppUserCommand updateAppUserCommand) {
         log.info("Http request, PUT / /api/users/update-data, with command " + updateAppUserCommand.toString());
-        AppUserinfo appUserinfo = appUserService.updateAppUser(updateAppUserCommand);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails loggedInUser = appUserService.loadUserByUsername((String) authentication.getPrincipal());
+        AppUserinfo appUserinfo = appUserService.updateAppUser(loggedInUser, updateAppUserCommand);
         return new ResponseEntity<>(appUserinfo, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete-my-user")
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public ResponseEntity<String> deleteAppUser(@RequestBody UserNameToDelete deleteCommand) {
-        log.info("Http request, DELETE / /api/users/delete");
-        appUserService.deleteAppUser(deleteCommand);
+    public ResponseEntity<String> deleteAppUser() {
+        log.info("Http request, DELETE / /api/users/delete-my-user");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails loggedInUser = appUserService.loadUserByUsername((String) authentication.getPrincipal());
+        appUserService.deleteMyUser(loggedInUser);
         return new ResponseEntity<>("User delete was successful", HttpStatus.OK);
+    }
 
+    @DeleteMapping("/delete-user/{userId}")
+    @Secured({"ROLE_ADMIN"})
+    public ResponseEntity<String> deleteAppUser(@PathVariable("userId") Integer userId) {
+        log.info("Http request, DELETE / /api/users/delete-user/{userId} with id:" + userId);
+        appUserService.deleteAppUser(userId);
+        return new ResponseEntity<>("User delete was successful", HttpStatus.OK);
     }
 
     @PostMapping("/login")
