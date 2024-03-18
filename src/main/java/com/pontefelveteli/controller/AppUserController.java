@@ -2,6 +2,8 @@ package com.pontefelveteli.controller;
 
 import com.pontefelveteli.dto.AppUserinfo;
 import com.pontefelveteli.dto.CreateAppUserCommand;
+import com.pontefelveteli.dto.UpdateAppUserCommand;
+import com.pontefelveteli.dto.UserMailToDelete;
 import com.pontefelveteli.service.AppUserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +27,7 @@ public class AppUserController {
         this.appUserService = appUserService;
     }
 
-    @PostMapping
+    @PostMapping("/save")
     public ResponseEntity<AppUserinfo> saveAppUser(@RequestBody @Valid CreateAppUserCommand createAppUserCommand) {
         log.info("Http request, POST / /api/users, with command: " + createAppUserCommand.toString());
         AppUserinfo appUserInfo = appUserService.saveAppUser(createAppUserCommand);
@@ -40,5 +42,19 @@ public class AppUserController {
         return new ResponseEntity<>(appUserinfoList, HttpStatus.OK);
     }
 
+    @PutMapping("/update-data")
+    public ResponseEntity<AppUserinfo> updateAppUser(@RequestBody @Valid UpdateAppUserCommand updateAppUserCommand) {
+        log.info("Http request, PUT / /api/users/update-data, with command " + updateAppUserCommand.toString());
+        AppUserinfo appUserinfo = appUserService.updateAppUser(updateAppUserCommand);
+        return new ResponseEntity<>(appUserinfo, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteAppUser(@RequestBody UserMailToDelete deleteCommand){
+        log.info("Http request, DELETE / /api/users/delete");
+        appUserService.deleteAppUser(deleteCommand);
+        return new ResponseEntity<>("User delete was successful", HttpStatus.OK);
+
+    }
 
 }
