@@ -32,13 +32,9 @@ public class AppUserService {
         this.modelMapper = modelMapper;
     }
 
-    public AppUserinfo saveAppUser(CreateAppUserCommand createAppUserCommand) {
+    public void saveAppUser(CreateAppUserCommand createAppUserCommand) {
         AppUser appUser = modelMapper.map(createAppUserCommand, AppUser.class);
-        List<AddressInfo> addressInfoList = addressService.saveAddress(appUser, createAppUserCommand.getCreateAddressCommandList());
         appUserRepository.save(appUser);
-        AppUserinfo appUserinfo = modelMapper.map(appUser, AppUserinfo.class);
-        appUserinfo.setAddressInfoList(addressInfoList);
-        return appUserinfo;
     }
 
     public List<AppUserinfo> listAllAppUsers(Integer pageNo, Integer pageSize) {
@@ -54,9 +50,10 @@ public class AppUserService {
     }
 
     public AppUserinfo updateAppUser(UpdateAppUserCommand updateAppUserCommand) {
-        AppUser appUserToUpdate = findByEmail(updateAppUserCommand.getEmail());
+        AppUser appUserToUpdate = findByName(updateAppUserCommand.getName());
         modelMapper.map(updateAppUserCommand, appUserToUpdate);
-        addressService.updateAddress(appUserToUpdate, updateAppUserCommand.getUpdateAddressCommand());
+        List<Address> addressList = addressService.updateAddress(appUserToUpdate, updateAppUserCommand.getUpdateAddressCommand());
+        appUserToUpdate.setAddressList(addressList);
         appUserRepository.save(appUserToUpdate);
         return getAppUserinfo(appUserToUpdate);
     }
@@ -67,15 +64,19 @@ public class AppUserService {
         return appUserinfo;
     }
 
-    public AppUser findByEmail(String email) {
-        Optional<AppUser> appUserOptional = appUserRepository.findByEmail(email);
+    public AppUser findByName(String name) {
+        Optional<AppUser> appUserOptional = appUserRepository.findByName(name);
         if (appUserOptional.isEmpty()) {
-            throw new UsernameNotFoundException(email);
+            throw new UsernameNotFoundException(name);
         }
         return appUserOptional.get();
     }
 
-    public void deleteAppUser(UserMailToDelete deleteCommand) {
-        appUserRepository.delete(findByEmail(deleteCommand.getEmail()));
+    public void deleteAppUser(UserNameToDelete deleteCommand) {
+        appUserRepository.delete(findByName(deleteCommand.getName()));
     }
+
+//    public AppUserinfo updatePassword(UpdatePasswordCommand updatePasswordCommand) {
+//
+//    }
 }

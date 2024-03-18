@@ -1,5 +1,6 @@
 package com.pontefelveteli.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserMailToDelete {
-    private String email;
+
+public class UpdatePasswordCommand {
+    private String oldPassword;
+    private String newPassword;
 }

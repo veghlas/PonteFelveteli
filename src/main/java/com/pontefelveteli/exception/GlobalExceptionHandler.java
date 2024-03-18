@@ -34,8 +34,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<List<ValidationError>> handleUsernameNotFoundException(UsernameNotFoundException exception) {
-        ValidationError validationError = new ValidationError("email",
-                "User not found with email: " + exception.getEmail());
+        ValidationError validationError = new ValidationError("name",
+                "User not found with name: " + exception.getName());
         log.error("Error in validation: " + validationError.getField() + ": " + validationError.getErrorMessage());
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }

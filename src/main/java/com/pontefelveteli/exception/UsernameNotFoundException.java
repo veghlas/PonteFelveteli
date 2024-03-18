@@ -2,12 +2,12 @@ package com.pontefelveteli.exception;
 
 public class UsernameNotFoundException extends RuntimeException {
 
-    private String email;
-    public UsernameNotFoundException(String email) {
-        this.email = email;
+    private String name;
+    public UsernameNotFoundException(String name) {
+        this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getName() {
+        return name;
     }
 }

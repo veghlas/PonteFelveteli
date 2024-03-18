@@ -12,9 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AppUserinfo {
 
-    private String firstName;
-
-    private String lastName;
+    private String Name;
 
     private LocalDate dateOfBirth;
 

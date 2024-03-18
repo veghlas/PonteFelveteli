@@ -10,9 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateAppUserCommand {
-    private String firstName;
-
-    private String lastName;
+    private String name;
 
     private LocalDate dateOfBirth;
 

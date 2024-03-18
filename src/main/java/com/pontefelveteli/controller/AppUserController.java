@@ -1,9 +1,6 @@
 package com.pontefelveteli.controller;
 
-import com.pontefelveteli.dto.AppUserinfo;
-import com.pontefelveteli.dto.CreateAppUserCommand;
-import com.pontefelveteli.dto.UpdateAppUserCommand;
-import com.pontefelveteli.dto.UserMailToDelete;
+import com.pontefelveteli.dto.*;
 import com.pontefelveteli.service.AppUserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.transform.OutputKeys;
 import java.util.List;
 
 
@@ -27,11 +23,11 @@ public class AppUserController {
         this.appUserService = appUserService;
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<AppUserinfo> saveAppUser(@RequestBody @Valid CreateAppUserCommand createAppUserCommand) {
-        log.info("Http request, POST / /api/users, with command: " + createAppUserCommand.toString());
-        AppUserinfo appUserInfo = appUserService.saveAppUser(createAppUserCommand);
-        return new ResponseEntity<>(appUserInfo, HttpStatus.CREATED);
+    @PostMapping("/create")
+    public ResponseEntity<String> saveAppUser(@RequestBody @Valid CreateAppUserCommand createAppUserCommand) {
+        log.info("Http request, POST / /api/users/create, with command: " + createAppUserCommand.toString());
+        appUserService.saveAppUser(createAppUserCommand);
+        return new ResponseEntity<>("User has been created.", HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -50,11 +46,18 @@ public class AppUserController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteAppUser(@RequestBody UserMailToDelete deleteCommand){
+    public ResponseEntity<String> deleteAppUser(@RequestBody UserNameToDelete deleteCommand){
         log.info("Http request, DELETE / /api/users/delete");
         appUserService.deleteAppUser(deleteCommand);
         return new ResponseEntity<>("User delete was successful", HttpStatus.OK);
 
     }
+
+//    @PutMapping("/update-password")
+//    public ResponseEntity<AppUserinfo> updateAppUser(@RequestBody @Valid UpdatePasswordCommand updatePasswordCommand) {
+//        log.info("Http request, PUT / /api/users/update-data, with command " + updatePasswordCommand.toString());
+//        AppUserinfo appUserinfo = appUserService.updatePassword(updatePasswordCommand);
+//        return new ResponseEntity<>(appUserinfo, HttpStatus.OK);
+//    }
 
 }

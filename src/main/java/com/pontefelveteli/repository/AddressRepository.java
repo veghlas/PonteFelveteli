@@ -13,8 +13,8 @@ import java.util.Optional;
 
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Integer> {
-    @Query("select ad from AppUser a join a.addressList ad where a.email=:email")
-    List<Address> findByEmail(String email);
-    @Query("select ad from AppUser a join a.addressList ad where a.email=:email and ad.id=:addressId")
-    Optional<Address> findByIdAndMail(String email, Integer addressId);
+    @Query("select ad from AppUser a join a.addressList ad where a.name=:name")
+    List<Address> findByName(String name);
+    @Query("select ad from AppUser a join a.addressList ad where a.name=:name and ad.id=:addressId")
+    Optional<Address> findByNameAndId(String name, Integer addressId);
 }

@@ -3,9 +3,7 @@ package com.pontefelveteli.service;
 import com.pontefelveteli.domain.Address;
 import com.pontefelveteli.domain.AppUser;
 import com.pontefelveteli.dto.AddressInfo;
-import com.pontefelveteli.dto.CreateAddressCommand;
 import com.pontefelveteli.dto.UpdateAddressCommand;
-import com.pontefelveteli.exception.AddressNotFoundException;
 import com.pontefelveteli.repository.AddressRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +27,16 @@ public class AddressService {
         this.modelMapper = modelMapper;
     }
 
-    public List<AddressInfo> saveAddress(AppUser appUSer, List<CreateAddressCommand> createAddressCommandList) {
-        List<Address> addressList = new ArrayList<>();
-        createAddressCommandList.forEach(createAddressCommand -> {
-            Address address = modelMapper.map(createAddressCommand, Address.class);
-            address.setUser(appUSer);
-            addressList.add(address);
-            addressRepository.save(address);
-        });
-        return mapAddresListToAddresInfoList(addressList);
-    }
+//    public List<AddressInfo> saveAddress(AppUser appUSer, List<CreateAddressCommand> createAddressCommandList) {
+//        List<Address> addressList = new ArrayList<>();
+//        createAddressCommandList.forEach(createAddressCommand -> {
+//            Address address = modelMapper.map(createAddressCommand, Address.class);
+//            address.setUser(appUSer);
+//            addressList.add(address);
+//            addressRepository.save(address);
+//        });
+//        return mapAddresListToAddresInfoList(addressList);
+//    }
 
     public List<AddressInfo> mapAddresListToAddresInfoList(List<Address> addressList) {
         List<AddressInfo> addressInfoList = new ArrayList<>();
@@ -50,26 +48,28 @@ public class AddressService {
     }
 
 
-
-    private List<Address> findAddressesByUser(String email) {
-        return addressRepository.findByEmail(email);
+    private List<Address> findAddressesByName(String name) {
+        return addressRepository.findByName(name);
     }
 
-    private Address findAddressesById(String email, Integer addressId) {
-        Optional<Address> addressOptional = addressRepository.findByIdAndMail(email, addressId);
-        if (addressOptional.isEmpty()) {
-            throw new AddressNotFoundException(addressId, email);
+    private Address findAddressById(String name, Integer addressId) {
+        Optional<Address> addressOptional = addressRepository.findByNameAndId(name, addressId);
+        Address address = addressOptional.orElse(null);
+        return address;
+    }
+
+    public List<Address> updateAddress(AppUser appUserToUpdate, UpdateAddressCommand updateAddressCommand) {
+        Address addressById = findAddressById(appUserToUpdate.getName(), updateAddressCommand.getId());
+        if (addressById == null) {
+            addressById = new Address();
         }
-        return addressOptional.get();
-    }
 
-    public Address updateAddress(AppUser appUserToUpdate, UpdateAddressCommand updateAddressCommand) {
-        Address addressById = findAddressesById(appUserToUpdate.getEmail(), updateAddressCommand.getId());
         addressById.setCity(updateAddressCommand.getCity());
         addressById.setStreet(updateAddressCommand.getStreet());
         addressById.setZipCode(updateAddressCommand.getZipCode());
         addressById.setHouseNumber(updateAddressCommand.getHouseNumber());
+        addressById.setUser(appUserToUpdate);
         addressRepository.save(addressById);
-        return addressById;
+        return findAddressesByName(appUserToUpdate.getName());
     }
 }
