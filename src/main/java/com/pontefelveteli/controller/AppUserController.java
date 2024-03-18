@@ -1,5 +1,6 @@
 package com.pontefelveteli.controller;
 
+import com.pontefelveteli.domain.AppUser;
 import com.pontefelveteli.dto.*;
 import com.pontefelveteli.service.AppUserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -65,7 +66,6 @@ public class AppUserController {
     }
 
     @PostMapping("/logout")
-    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     public ResponseEntity<String> logout(HttpServletRequest request) {
         String token = extractToken(request);
         invalidateToken(token);
@@ -76,6 +76,12 @@ public class AppUserController {
     public ResponseEntity<RefreshTokenResponse> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         RefreshTokenResponse tokenResponse = appUserService.refreshToken(refreshTokenRequest);
         return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<Void> getTestName() {
+        AppUser testAlany2 = appUserService.findByName("Test Alany2");
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

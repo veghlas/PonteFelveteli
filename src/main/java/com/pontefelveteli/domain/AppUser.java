@@ -19,7 +19,7 @@ public class AppUser {
     @SequenceGenerator(name="app_user_seq", sequenceName="app_user_seq", allocationSize=1)
     private Integer id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @Column(name = "date_of_birth")
@@ -28,18 +28,18 @@ public class AppUser {
     @Column(name = "name_of_mother")
     private String nameOfMother;
 
-    @Column(name = "social_security_number")
+    @Column(name = "social_security_number", unique = true)
     private Integer socialSecurityNumber;
 
-    @Column(name = "tax_number")
+    @Column(name = "tax_number", unique = true)
     private Integer taxNumber;
 
-    @Column(name = "email_address")
+    @Column(name = "email_address", unique = true)
     private String email;
 
     @ElementCollection
     @CollectionTable(name = "phone_numbers")
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", unique = true)
     private List<String> phone_numbers;
 
     @OneToMany(mappedBy = "user")

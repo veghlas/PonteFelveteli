@@ -36,4 +36,4 @@ security:
     expiration: 31536000000
     refresh: 2592000000
   aes:
-    secret: webShopProject
+    secret: pontefelveteli

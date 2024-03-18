@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Base64;
 
 @Configuration
-@ConfigurationProperties(prefix = "fundraiser-project.aes")
+@ConfigurationProperties(prefix = "pontefelveteli.aes")
 @Setter
 public class AESConfig {
     private String secret;

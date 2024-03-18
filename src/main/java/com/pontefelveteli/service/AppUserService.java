@@ -42,26 +42,27 @@ public class AppUserService implements UserDetailsService {
     private AppUserRepository appUserRepository;
     private AddressService addressService;
     private ModelMapper modelMapper;
-    private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
+    private PasswordEncoder passwordEncoder;
 
     @Value("${security.jwt.expiration}")
-    private static Long ACCESS_TOKEN_EXPIRATION_TIME;
+    private Long ACCESS_TOKEN_EXPIRATION_TIME;
 
     @Value("${security.jwt.refresh}")
-    private static Long REFRESH_TOKEN_EXPIRATION_TIME;
+    private Long REFRESH_TOKEN_EXPIRATION_TIME;
 
     @Autowired
-    public AppUserService(AppUserRepository appUserRepository, AddressService addressService, ModelMapper modelMapper, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+    public AppUserService(AppUserRepository appUserRepository, AddressService addressService, ModelMapper modelMapper, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
         this.appUserRepository = appUserRepository;
         this.addressService = addressService;
         this.modelMapper = modelMapper;
-        this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void saveAppUser(CreateAppUserCommand createAppUserCommand) {
         AppUser appUser = modelMapper.map(createAppUserCommand, AppUser.class);
+        appUser.setPassword(passwordEncoder.encode(createAppUserCommand.getPassword()));
         appUserRepository.save(appUser);
     }
 
@@ -110,7 +111,7 @@ public class AppUserService implements UserDetailsService {
         AppUser appUser = findByName(username);
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         appUser.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.name())));
-        return User.withUsername(appUser.getEmail())
+        return User.withUsername(appUser.getName())
                 .password(appUser.getPassword())
                 .authorities(authorities)
                 .build();
@@ -125,7 +126,7 @@ public class AppUserService implements UserDetailsService {
 
     public AuthenticationResponseDto login(AuthenticationRequestDto authenticationRequestDto) {
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(authenticationRequestDto.getEmail(), authenticationRequestDto.getPassword());
+                new UsernamePasswordAuthenticationToken(authenticationRequestDto.getName(), authenticationRequestDto.getPassword());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         User user = (User) authentication.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256(SecretConfig.getSecret().getBytes());
@@ -151,8 +152,8 @@ public class AppUserService implements UserDetailsService {
 
     private AuthenticatedUserInfo createAuthenticatedUserInfo(AuthenticationRequestDto authenticationRequestDto) {
         AuthenticatedUserInfo authenticatedUserInfo = new AuthenticatedUserInfo();
-        authenticatedUserInfo.setEmail(authenticationRequestDto.getEmail());
-        authenticatedUserInfo.setRoles(parseRoles(loadUserByUsername(authenticationRequestDto.getEmail())));
+        authenticatedUserInfo.setEmail(authenticationRequestDto.getName());
+        authenticatedUserInfo.setRoles(parseRoles(loadUserByUsername(authenticationRequestDto.getName())));
         return authenticatedUserInfo;
     }
 
