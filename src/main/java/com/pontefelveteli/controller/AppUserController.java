@@ -72,4 +72,10 @@ public class AppUserController {
         return new ResponseEntity<>("You have logged out.", HttpStatus.OK);
     }
 
+    @PostMapping("/token/refresh")
+    public ResponseEntity<RefreshTokenResponse> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        RefreshTokenResponse tokenResponse = appUserService.refreshToken(refreshTokenRequest);
+        return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
+    }
+
 }

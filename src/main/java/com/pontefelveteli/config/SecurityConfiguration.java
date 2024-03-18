@@ -17,9 +17,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
+import javax.servlet.Filter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +28,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final AppUserService appUserService;
     private final PasswordEncoder bCryptPasswordEncoder;
     private static final Set<String> invalidatedTokens = new HashSet<>();

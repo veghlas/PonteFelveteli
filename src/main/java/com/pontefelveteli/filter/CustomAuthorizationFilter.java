@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 
-
+import javax.servlet.Filter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,10 +37,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Component
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
-    // Minden kérés előtt lefut.
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // ELőször azt nézzük meg hogy a login path-re jött-e a kérés, ha igen akkor nem csinálunk semmit
+
         if (request.getServletPath().equals("/api/users/login") || request.getServletPath().equals("/api/users/token/refresh"))
         {
             filterChain.doFilter(request, response);
@@ -80,4 +79,5 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             }
         }
     }
+
 }
