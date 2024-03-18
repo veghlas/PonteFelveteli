@@ -27,16 +27,20 @@ public class AddressService {
         this.modelMapper = modelMapper;
     }
 
-//    public List<AddressInfo> saveAddress(AppUser appUSer, List<CreateAddressCommand> createAddressCommandList) {
-//        List<Address> addressList = new ArrayList<>();
-//        createAddressCommandList.forEach(createAddressCommand -> {
-//            Address address = modelMapper.map(createAddressCommand, Address.class);
-//            address.setUser(appUSer);
-//            addressList.add(address);
-//            addressRepository.save(address);
-//        });
-//        return mapAddresListToAddresInfoList(addressList);
-//    }
+    public List<Address> updateAddress(AppUser appUserToUpdate, UpdateAddressCommand updateAddressCommand) {
+        Address addressById = findAddressById(appUserToUpdate.getName(), updateAddressCommand.getId());
+        if (addressById == null) {
+            addressById = new Address();
+        }
+
+        addressById.setCity(updateAddressCommand.getCity());
+        addressById.setStreet(updateAddressCommand.getStreet());
+        addressById.setZipCode(updateAddressCommand.getZipCode());
+        addressById.setHouseNumber(updateAddressCommand.getHouseNumber());
+        addressById.setUser(appUserToUpdate);
+        addressRepository.save(addressById);
+        return findAddressesByName(appUserToUpdate.getName());
+    }
 
     public List<AddressInfo> mapAddresListToAddresInfoList(List<Address> addressList) {
         List<AddressInfo> addressInfoList = new ArrayList<>();
@@ -58,18 +62,4 @@ public class AddressService {
         return address;
     }
 
-    public List<Address> updateAddress(AppUser appUserToUpdate, UpdateAddressCommand updateAddressCommand) {
-        Address addressById = findAddressById(appUserToUpdate.getName(), updateAddressCommand.getId());
-        if (addressById == null) {
-            addressById = new Address();
-        }
-
-        addressById.setCity(updateAddressCommand.getCity());
-        addressById.setStreet(updateAddressCommand.getStreet());
-        addressById.setZipCode(updateAddressCommand.getZipCode());
-        addressById.setHouseNumber(updateAddressCommand.getHouseNumber());
-        addressById.setUser(appUserToUpdate);
-        addressRepository.save(addressById);
-        return findAddressesByName(appUserToUpdate.getName());
-    }
 }

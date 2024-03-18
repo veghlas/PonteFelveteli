@@ -1,17 +1,20 @@
 package com.pontefelveteli.controller;
 
-import com.pontefelveteli.dto.AppUserinfo;
-import com.pontefelveteli.dto.CreateAppUserCommand;
+import com.pontefelveteli.dto.*;
 import com.pontefelveteli.service.AppUserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.transform.OutputKeys;
 import java.util.List;
+
+import static com.pontefelveteli.config.SecurityConfiguration.extractToken;
+import static com.pontefelveteli.config.SecurityConfiguration.invalidateToken;
 
 
 @RestController
@@ -48,18 +51,25 @@ public class AppUserController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteAppUser(@RequestBody UserNameToDelete deleteCommand){
+    public ResponseEntity<String> deleteAppUser(@RequestBody UserNameToDelete deleteCommand) {
         log.info("Http request, DELETE / /api/users/delete");
         appUserService.deleteAppUser(deleteCommand);
         return new ResponseEntity<>("User delete was successful", HttpStatus.OK);
 
     }
 
-//    @PutMapping("/update-password")
-//    public ResponseEntity<AppUserinfo> updateAppUser(@RequestBody @Valid UpdatePasswordCommand updatePasswordCommand) {
-//        log.info("Http request, PUT / /api/users/update-data, with command " + updatePasswordCommand.toString());
-//        AppUserinfo appUserinfo = appUserService.updatePassword(updatePasswordCommand);
-//        return new ResponseEntity<>(appUserinfo, HttpStatus.OK);
-//    }
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationResponseDto> login(@RequestBody AuthenticationRequestDto authenticationRequestDto) {
+        AuthenticationResponseDto responseDto = appUserService.login(authenticationRequestDto);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/logout")
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        String token = extractToken(request);
+        invalidateToken(token);
+        return new ResponseEntity<>("You have logged out.", HttpStatus.OK);
+    }
 
 }

@@ -31,3 +31,9 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 
+security:
+  jwt:
+    expiration: 31536000000
+    refresh: 2592000000
+  aes:
+    secret: webShopProject
