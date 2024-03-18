@@ -63,6 +63,7 @@ public class AppUserService implements UserDetailsService {
     public void saveAppUser(CreateAppUserCommand createAppUserCommand) {
         AppUser appUser = modelMapper.map(createAppUserCommand, AppUser.class);
         appUser.setPassword(passwordEncoder.encode(createAppUserCommand.getPassword()));
+        appUser.setRoles(List.of(Role.ROLE_USER));
         appUserRepository.save(appUser);
     }
 
@@ -174,5 +175,31 @@ public class AppUserService implements UserDetailsService {
                 .sign(algorithm);
 
         return new RefreshTokenResponse(accessToken);
+    }
+
+    public String updatePassword(UserDetails loggedInUser, UpdatePasswordCommand command) {
+        AppUser appUser = findByUserDetails(loggedInUser);
+        String resultText = "";
+        if (checkIfValidOldPassword(appUser, command.getOldPassword())) {
+            appUser.setPassword(passwordEncoder.encode(command.getNewPassword()));
+            appUserRepository.save(appUser);
+            resultText += "Password changed successfully!";
+            return resultText;
+        } else {
+            resultText += "Your old password is wrong!";
+            return resultText;
+        }
+    }
+
+    private boolean checkIfValidOldPassword(AppUser appUser, String oldPassword) {
+        return passwordEncoder.matches(oldPassword, appUser.getPassword());
+    }
+
+    public AppUser findByUserDetails(UserDetails userDetails) {
+        Optional<AppUser> userOptional = appUserRepository.findByName(userDetails.getUsername());
+        if (userOptional.isEmpty()) {
+            throw new UsernameNotFoundException(userDetails.getUsername());
+        }
+        return userOptional.get();
     }
 }

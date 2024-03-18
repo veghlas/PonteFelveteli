@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +33,7 @@ public class AppUserController {
     }
 
     @PostMapping("/create")
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<String> saveAppUser(@RequestBody @Valid CreateAppUserCommand createAppUserCommand) {
         log.info("Http request, POST / /api/users/create, with command: " + createAppUserCommand.toString());
         appUserService.saveAppUser(createAppUserCommand);
@@ -37,6 +41,7 @@ public class AppUserController {
     }
 
     @GetMapping
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<List<AppUserinfo>> getAllAppUsers(@RequestParam(value = "pageNo", defaultValue = "0", required = false) Integer pageNo,
                                                             @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
         log.info("Http request, GET / /api/users");
@@ -45,6 +50,7 @@ public class AppUserController {
     }
 
     @PutMapping("/update-data")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<AppUserinfo> updateAppUser(@RequestBody @Valid UpdateAppUserCommand updateAppUserCommand) {
         log.info("Http request, PUT / /api/users/update-data, with command " + updateAppUserCommand.toString());
         AppUserinfo appUserinfo = appUserService.updateAppUser(updateAppUserCommand);
@@ -52,6 +58,7 @@ public class AppUserController {
     }
 
     @DeleteMapping("/delete")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<String> deleteAppUser(@RequestBody UserNameToDelete deleteCommand) {
         log.info("Http request, DELETE / /api/users/delete");
         appUserService.deleteAppUser(deleteCommand);
@@ -66,6 +73,7 @@ public class AppUserController {
     }
 
     @PostMapping("/logout")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<String> logout(HttpServletRequest request) {
         String token = extractToken(request);
         invalidateToken(token);
@@ -78,10 +86,15 @@ public class AppUserController {
         return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<Void> getTestName() {
-        AppUser testAlany2 = appUserService.findByName("Test Alany2");
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/update-password")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    public ResponseEntity<String> changePassword(@RequestBody @Valid UpdatePasswordCommand command) {
+        log.info("Http request, PUT / /users/update-password with command: " + command.toString());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails loggedInUser = appUserService.loadUserByUsername((String) authentication.getPrincipal());
+        String resultMessage = appUserService.updatePassword(loggedInUser, command);
+        return new ResponseEntity<>(resultMessage,
+                resultMessage.equals("Password changed successfully!") ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
 }
