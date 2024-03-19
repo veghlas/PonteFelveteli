@@ -11,6 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticatedUserInfo {
-    private String email;
+    private String name;
     private List<Role> roles;
 }

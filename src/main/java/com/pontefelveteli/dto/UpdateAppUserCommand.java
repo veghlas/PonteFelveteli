@@ -44,5 +44,5 @@ public class UpdateAppUserCommand {
             message = "Incorrect email format!")
     private String email;
 
-    private List<String> phone_numbers;
+    private List<String> phoneNumbers;
 }

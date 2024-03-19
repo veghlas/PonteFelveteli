@@ -40,7 +40,7 @@ public class AppUser {
     @ElementCollection
     @CollectionTable(name = "phone_numbers")
     @Column(name = "phone_number", unique = true)
-    private List<String> phone_numbers;
+    private List<String> phoneNumbers;
 
     @OneToMany(mappedBy = "user")
     private List<Address> addressList;

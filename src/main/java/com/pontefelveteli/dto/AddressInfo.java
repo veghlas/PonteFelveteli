@@ -1,6 +1,5 @@
 package com.pontefelveteli.dto;
 
-import com.pontefelveteli.domain.AppUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

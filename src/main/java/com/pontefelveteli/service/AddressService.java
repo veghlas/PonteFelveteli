@@ -58,8 +58,7 @@ public class AddressService {
 
     private Address findAddressById(String name, Integer addressId) {
         Optional<Address> addressOptional = addressRepository.findByNameAndId(name, addressId);
-        Address address = addressOptional.orElse(null);
-        return address;
+        return addressOptional.orElse(null);
     }
 
 }

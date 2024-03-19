@@ -93,9 +93,11 @@ public class AppUserService implements UserDetailsService {
         return getAppUserinfo(appUserToUpdate);
     }
 
-    private AppUserInfo getAppUserinfo(AppUser appUserToUpdate) {
+    public AppUserInfo getAppUserinfo(AppUser appUserToUpdate) {
         AppUserInfo appUserInfo= modelMapper.map(appUserToUpdate, AppUserInfo.class);
-        appUserInfo.setAddressInfoList(addressService.mapAddresListToAddresInfoList(appUserToUpdate.getAddressList()));
+        if (appUserInfo != null) {
+            appUserInfo.setAddressInfoList(addressService.mapAddresListToAddresInfoList(appUserToUpdate.getAddressList()));
+        }
         return appUserInfo;
     }
 
@@ -170,7 +172,7 @@ public class AppUserService implements UserDetailsService {
 
     private AuthenticatedUserInfo createAuthenticatedUserInfo(AuthenticationRequestDto authenticationRequestDto) {
         AuthenticatedUserInfo authenticatedUserInfo = new AuthenticatedUserInfo();
-        authenticatedUserInfo.setEmail(authenticationRequestDto.getName());
+        authenticatedUserInfo.setName(authenticationRequestDto.getName());
         authenticatedUserInfo.setRoles(parseRoles(loadUserByUsername(authenticationRequestDto.getName())));
         return authenticatedUserInfo;
     }

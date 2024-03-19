@@ -28,5 +28,5 @@ public class AppUserInfo {
 
     private String email;
 
-    private List<String> phone_numbers;
+    private List<String> phoneNumbers;
 }

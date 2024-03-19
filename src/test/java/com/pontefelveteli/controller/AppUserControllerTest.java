@@ -28,16 +28,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @WebMvcTest(controllers = AppUserController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
-public class AppUserControllerTest {
+class AppUserControllerTest {
+
 
     @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
     private MockMvc mockMvc;
-    @MockBean
-    private SecurityContext securityContextMock;
-    @MockBean
-    private Authentication authenticationMock;
     @MockBean
     private AppUserService appUserService;
     private AppUserInfo appUserInfo;
