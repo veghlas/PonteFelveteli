@@ -83,8 +83,8 @@ public class AppUserService implements UserDetailsService {
 
     public AppUserInfo updateAppUser(UserDetails loggedInUser, UpdateAppUserCommand updateAppUserCommand) {
         AppUser appUserToUpdate = findByName(loggedInUser.getUsername());
-        if (updateAppUserCommand.getEmail() == null && updateAppUserCommand.getPhone_numbers() == null) {
-            throw new EmailOrPhoneNumberIsRequiredException(appUserToUpdate.getEmail(), appUserToUpdate.getPhone_numbers());
+        if (updateAppUserCommand.getEmail() == null && updateAppUserCommand.getPhoneNumbers() == null) {
+            throw new EmailOrPhoneNumberIsRequiredException(appUserToUpdate.getEmail(), appUserToUpdate.getPhoneNumbers());
         }
         modelMapper.map(updateAppUserCommand, appUserToUpdate);
         List<Address> addressList = addressService.updateAddress(appUserToUpdate, updateAppUserCommand.getUpdateAddressCommand());
