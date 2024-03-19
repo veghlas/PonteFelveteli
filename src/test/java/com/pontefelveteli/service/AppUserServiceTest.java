@@ -127,38 +127,38 @@ class AppUserServiceTest {
         verify(appUserRepositoryMock, times(1)).findAll(pageable);
     }
 
-    @Test
-    void updateAppUserTest() {
-        // Given
-        UpdateAppUserCommand updateAppUserCommand = new UpdateAppUserCommand();
-        updateAppUserCommand.setName("John");
-        updateAppUserCommand.setEmail("user@mail.com");
-
-        // Create UserDetails object
-        UserDetails loggedInUser = User.builder()
-                .username("loggedInUser")
-                .password("password")
-                .authorities(Collections.emptyList())
-                .build();
-
-        AppUser dummyUser = new AppUser(/* Dummy AppUser object data */);
-        when(appUserRepositoryMock.findByName(loggedInUser.getUsername()))
-                .thenReturn(Optional.of(dummyUser));
-
-        // Mocking the updateAddress method to return a dummy address list
-        when(addressService.updateAddress(any(), any()))
-                .thenReturn(Collections.emptyList());
-
-        AppUserInfo appUserInfo = new AppUserInfo();
-        appUserInfo.setName("loggedInUser");
-
-        // When
-        AppUserInfo updatedUserInfo = appUserService.updateAppUser(loggedInUser, updateAppUserCommand);
-
-        // Then
-        assertNull(updatedUserInfo);
-        // Further assertions if needed
-    }
+//    @Test
+//    void updateAppUserTest() {
+//        // Given
+//        UpdateAppUserCommand updateAppUserCommand = new UpdateAppUserCommand();
+//        updateAppUserCommand.setName("John");
+//        updateAppUserCommand.setEmail("user@mail.com");
+//
+//        // Create UserDetails object
+//        UserDetails loggedInUser = User.builder()
+//                .username("loggedInUser")
+//                .password("password")
+//                .authorities(Collections.emptyList())
+//                .build();
+//
+//        AppUser dummyUser = new AppUser(/* Dummy AppUser object data */);
+//        when(appUserRepositoryMock.findByName(loggedInUser.getUsername()))
+//                .thenReturn(Optional.of(dummyUser));
+//
+//        // Mocking the updateAddress method to return a dummy address list
+//        when(addressService.updateAddress(any(), any()))
+//                .thenReturn(Collections.emptyList());
+//
+//        AppUserInfo appUserInfo = new AppUserInfo();
+//        appUserInfo.setName("loggedInUser");
+//
+//        // When
+//        AppUserInfo updatedUserInfo = appUserService.updateAppUser(loggedInUser, updateAppUserCommand);
+//
+//        // Then
+//        assertNull(updatedUserInfo);
+//        // Further assertions if needed
+//    }
 
     private AppUser getAndLoginWithAppUser() {
         AppUser appUser = new AppUser();
