@@ -32,7 +32,7 @@ Telepítés és Indítás
 
 4. Most futtasd a következő parancsot a Docker indításához:
 
-   docker-compose up --build -d
+   docker-compose up
    
 Ez a parancs elindítja a Docker konténert a projekt számára, és futtatja az alkalmazást.
 
