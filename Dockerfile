@@ -10,7 +10,7 @@ COPY ${JAR_FILE} application.jar
 CMD apt-get update -y
 
 # a DatabaseUploader futtatása
-RUN java -cp application.jar com.pontefelveteli.DBLoader.DatabaseUploader
+RUN java -cp application.jar com.pontefelveteli.DBLoader.InitialDataLoader
 
 # Set the default command to run the Java application
 ENTRYPOINT ["java", "-Xmx2048M", "-jar", "/application.jar"]
