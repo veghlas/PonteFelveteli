@@ -16,7 +16,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: myapp_container
+    container_name: pontefelveteli
     depends_on:
       - db
     ports:

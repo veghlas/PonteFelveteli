@@ -11,7 +11,7 @@ WORKDIR /app
 RUN ./mvnw clean package
 
 # Másold be a generált futtatható JAR állományt a konténerbe
-COPY target/backend-0.0.1-SNAPSHOT.jar /app/backend.jar
+COPY target/pontefelveteli.jar /app/backend.jar
 
 
 # Indítsd el az alkalmazást
