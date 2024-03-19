@@ -1,14 +1,13 @@
-# Használj egy alap Spring Boot képet
-FROM openjdk:17
+# the base image
+FROM amazoncorretto:17
 
-# Másold be a projekt forrásfájljait a konténerbe
-COPY . /app
+# the JAR file path
+ARG JAR_FILE=target/*.jar
 
-# Állítsd be a munkakönyvtárat
-WORKDIR /app
+# Copy the JAR file from the build context into the Docker image
+COPY ${JAR_FILE} application.jar
 
-# Telepítsd a szükséges függőségeket és buildeld újra az alkalmazást
-RUN ./mvnw clean package
+CMD apt-get update -y
 
-# Indítsd el az alkalmazást
-CMD ["java", "-jar", "target/pontefelveteli.jar"]
+# Set the default command to run the Java application
+ENTRYPOINT ["java", "-Xmx2048M", "-jar", "/application.jar"]
