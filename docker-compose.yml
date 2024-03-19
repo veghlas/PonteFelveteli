@@ -6,13 +6,13 @@ services:
     container_name: postgres_db
     restart: always
     environment:
-      POSTGRES_DB: user_repository
+      POSTGRES_DB: myappdb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
     ports:
       - "5432:5432"
 
-  myapp:
+  your-service:
     build:
       context: .
       dockerfile: Dockerfile
@@ -22,6 +22,6 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/user_repository
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/user_repository
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
