@@ -1,8 +1,8 @@
 package com.pontefelveteli.controller;
 
 import com.pontefelveteli.dto.AppUserInfo;
-
 import com.pontefelveteli.service.AppUserService;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,9 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -24,8 +22,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import static com.pontefelveteli.domain.Role.ROLE_ADMIN;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -35,17 +31,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 public class AppUserControllerTest {
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
     private MockMvc mockMvc;
     @MockBean
     private SecurityContext securityContextMock;
     @MockBean
     private Authentication authenticationMock;
-
     @MockBean
     private AppUserService appUserService;
-
     private AppUserInfo appUserInfo;
     private AppUserInfo appUserInfo2;
+
 
     @BeforeEach
     void test_init() {
@@ -56,23 +53,18 @@ public class AppUserControllerTest {
 
     @Test
     void getAllAppUsersTest() throws Exception {
-        when(securityContextMock.getAuthentication()).thenReturn(authenticationMock);
-        SecurityContextHolder.setContext(securityContextMock);
-        when(authenticationMock.getPrincipal()).thenReturn("testUser");
-        UserDetails userDetails = new User("testUser", "password", new ArrayList<>(ROLE_ADMIN.ordinal()));
-        when(appUserService.loadUserByUsername("testUser")).thenReturn(userDetails);
 
-
-
-        AppUserInfo appUserInfoList
+        List<AppUserInfo> appUserInfoList = new ArrayList<>(List.of(appUserInfo, appUserInfo2));
         when(appUserService.listAllAppUsers(1, 2)).thenReturn(appUserInfoList);
 
-        ResultActions response = mockMvc.perform(get("/api/customers")
+        ResultActions response = mockMvc.perform(get("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("pageNo","1")
+                .param("pageNo", "1")
                 .param("pageSize", "2"));
 
-        response.andExpect(MockMvcResultMatchers.status().isOk());
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.content.size()", CoreMatchers.is(appUserInfoList.size())));
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(appUserInfoList.size())));
     }
+
+
 }

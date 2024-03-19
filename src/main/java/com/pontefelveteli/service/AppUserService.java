@@ -83,7 +83,7 @@ public class AppUserService implements UserDetailsService {
 
     public AppUserInfo updateAppUser(UserDetails loggedInUser, UpdateAppUserCommand updateAppUserCommand) {
         AppUser appUserToUpdate = findByName(loggedInUser.getUsername());
-        if(updateAppUserCommand.getEmail() == null && updateAppUserCommand.getPhone_numbers() == null) {
+        if (updateAppUserCommand.getEmail() == null && updateAppUserCommand.getPhone_numbers() == null) {
             throw new EmailOrPhoneNumberIsRequiredException(appUserToUpdate.getEmail(), appUserToUpdate.getPhone_numbers());
         }
         modelMapper.map(updateAppUserCommand, appUserToUpdate);
@@ -94,9 +94,9 @@ public class AppUserService implements UserDetailsService {
     }
 
     private AppUserInfo getAppUserinfo(AppUser appUserToUpdate) {
-        AppUserInfo appUserinfo = modelMapper.map(appUserToUpdate, AppUserInfo.class);
-        appUserinfo.setAddressInfoList(addressService.mapAddresListToAddresInfoList(appUserToUpdate.getAddressList()));
-        return appUserinfo;
+        AppUserInfo appUserInfo= modelMapper.map(appUserToUpdate, AppUserInfo.class);
+        appUserInfo.setAddressInfoList(addressService.mapAddresListToAddresInfoList(appUserToUpdate.getAddressList()));
+        return appUserInfo;
     }
 
     public AppUser findByName(String name) {
@@ -115,7 +115,8 @@ public class AppUserService implements UserDetailsService {
         appUserRepository.delete(findById(userId));
     }
 
-    private AppUser findById(Integer userId) {
+    //public for testing reason
+    public AppUser findById(Integer userId) {
         Optional<AppUser> userOptional = appUserRepository.findById(userId);
         if (userOptional.isEmpty()) {
             throw new UserNotFoundById(userId);
@@ -207,7 +208,7 @@ public class AppUserService implements UserDetailsService {
         }
     }
 
-    private boolean checkIfValidOldPassword(AppUser appUser, String oldPassword) {
+    public boolean checkIfValidOldPassword(AppUser appUser, String oldPassword) {
         return passwordEncoder.matches(oldPassword, appUser.getPassword());
     }
 

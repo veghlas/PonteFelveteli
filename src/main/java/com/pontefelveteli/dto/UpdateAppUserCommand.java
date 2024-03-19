@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UpdateAppUserCommand {
 
-    @Pattern(regexp = "^[A-Za-záéiíoóöőuúüűÁÉIÍOÓÖŐUÚÜŰ]{2,20}",
+    @Pattern(regexp = "^[A-Za-záéiíoóöőuúüűÁÉIÍOÓÖŐUÚÜŰ ]{2,20}",
             message = "Name must be 2 to 20 characters without numeric digits.")
     @NotBlank(message = "Name is required")
     private String name;
@@ -27,7 +27,7 @@ public class UpdateAppUserCommand {
     @Past(message = "Date of birth should be in the past")
     private LocalDate dateOfBirth;
 
-    @Pattern(regexp = "^[A-Za-záéiíoóöőuúüűÁÉIÍOÓÖŐUÚÜŰ]{2,20}",
+    @Pattern(regexp = "^[A-Za-záéiíoóöőuúüűÁÉIÍOÓÖŐUÚÜŰ ]{2,20}",
             message = "Name of mother must be 2 to 20 characters without numeric digits.")
     @NotBlank(message = "Name is required")
     private String nameOfMother;
