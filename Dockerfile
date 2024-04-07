@@ -7,6 +7,8 @@ ARG JAR_FILE=target/*.jar
 # Copy the JAR file from the build context into the Docker image
 COPY ${JAR_FILE} application.jar
 
+RUN mvn clean package
+
 CMD apt-get update -y
 
 # Set the default command to run the Java application
